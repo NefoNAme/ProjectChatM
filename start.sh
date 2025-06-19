@@ -4,6 +4,8 @@ if [[ "$VIRTUAL_ENV" == "" ]]; then
     source ./.venv/bin/activate
 fi
 
+
+
 if [[ -f ".env" ]]; then
 
     set -a
