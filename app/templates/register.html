@@ -1,0 +1,46 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/styleRegistration.css">
+    <title>Document</title>
+
+</head>
+<body>
+    <div class="registration-contaner">
+        <input type="checkbox" id="registration"> <label for="scales">Scales</label>
+        <div class="ent">
+            <h2>Вход в систему</h2>
+                <div class="enterInput">
+                <input class="login_hold" type="text" name="username" placeholder="введите логин">
+                <input class="pass" type="password" name="password" placeholder="введите пароль">
+                
+            </div>
+            <div class="enter">
+                <a href="" class="enA">Войти</a>
+            </div>
+    </div>
+    </div>
+    <script>
+        check = document.getElementById("registration")
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+    <h1>Регистрация</h1>
+    <form method="POST">
+        <input type="text" name="loginname" placeholder="Имя пользователя" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <a href="{{ url_for('login') }}">Уже есть аккаунт? Войти</a>
+</body>
+</html>
