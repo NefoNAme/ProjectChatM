@@ -188,7 +188,7 @@ class MessageData:
                 result = cur.fetchall()
                 if result:
                     return result
-                return None
+                return []
         except Exception as e:
             print(f"Произошла ошибка: {e}")
             self.connect.rollback() 

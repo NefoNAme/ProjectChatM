@@ -1,6 +1,6 @@
 from datetime import datetime
 from itertools import zip_longest
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from src.database.modelsData import UserData, ChatDatabase, MessageData, UsersChatData
 import sys
 
@@ -65,26 +65,31 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    wrongMess = ''
     if request.method == 'POST':
         loginname = request.form['loginname']
         password = request.form['password']
-        user = user_data.getUser(loginname,password)  # Предполагается, что у вас есть метод для получения пользователя
+        user = user_data.getUser(loginname,password) 
         if user:
-            session['user_id'] = user["user_id"]  # Сохраняем ID пользователя в сессии
+            session['user_id'] = user["user_id"]  
             flash('Вы успешно вошли в систему!')
             return redirect(url_for('mainpage'))
-        flash('Ошибка: неверное имя пользователя или пароль.')
-    return render_template('login.html')
+        wrongMess = 'Ошибка: неверное имя пользователя или пароль.'
+        flash(wrongMess)
+       
+    return render_template('login.html',wrongMess=wrongMess)
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)  # Удаляем пользователя из сессии
+    session.pop('user_id', None)  
     flash('Вы вышли из системы.')
     return redirect(url_for('root'))
 
 @app.route('/mainpage')
 def mainpage():
-    chats = chat_data.getAllChats()  # Предполагается, что этот метод возвращает список чатов
+    chats = chat_data.getAllChats()
+     
+    
     return render_template('main.html', chats=chats)
 
 
@@ -92,7 +97,7 @@ def mainpage():
 def create_chat():
     chat_name = request.form.get('chat_name')
     if chat_name:
-        chat_data.addChat(chat_name, datetime.now())  # Добавляем новый чат
+        chat_data.addChat(chat_name, datetime.now()) 
         flash('Чат успешно создан!')
     else:
         flash('Введите имя чата!')
@@ -100,7 +105,7 @@ def create_chat():
 
 @app.route('/join_chat/<int:chat_id>', methods=['POST'])
 def join_chat(chat_id):
-    user_id = session.get('user_id')  # Получаем ID пользователя (например, из сессии)
+    user_id = session.get('user_id')  
     if user_id:
         users_chat_data.addUserToChat(chat_id, user_id) 
         
@@ -115,30 +120,33 @@ def chat(chat_id):
 
 
     if request.method == 'POST':
-        # Обработка POST-запроса для добавления сообщения
+        
         user_id = session.get('user_id')
-        print(f"ID user :{user_id}") # Получаем ID пользователя (например, из сессии)
+        print(f"ID user :{user_id}")
         message_text = request.form.get('message_text')
         print(f"message : {message_text}")
         if user_id and message_text:
-            message_data.addMessage(user_id,datetime.now(), chat_id, message_text)  # Добавляем сообщение
+            message_data.addMessage(user_id,datetime.now(), chat_id, message_text) 
             flash('Сообщение отправлено!')
         else:
             flash('Не удалось отправить сообщение!')
 
-    # Обработка GET-запроса для получения сообщений и пользователей
+   
     messages = message_data.getMessages(chat_id, 'chat_id')
     
     users = users_chat_data.getUsersInChat(chat_id) 
-    combined  = zip_longest(users,messages)
-    print("users:", users)  # Получаем пользователей в чате
+    combined  = zip_longest(users,messages) #полная лажа
+    print("users:", users)  
 
     return render_template('chat.html', chat_id=chat_id,
                            chatName=chat_data.getChatName(chat_id)["name"]
                            , messages=messages, users=users,combined = combined)
 
 
-
+@app.route('/chat/<int:chat_id>/messages', methods=['GET'])
+def get_messages(chat_id):
+    messages = message_data.getMessages(chat_id,'chat_id')
+    return jsonify(messages) 
     
 
 

@@ -3,14 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registrationStyle.css') }}">
+
+    <style>
+        
+    </style>
 </head>
 <body>
-    <h1>Вход</h1>
-    <form method="POST">
-        <input type="text" name="loginname" placeholder="Имя пользователя" required>
-        <input type="password" name="password" placeholder="Пароль" required>
-        <button type="submit">Войти</button>
-    </form>
-    <a href="{{ url_for('register') }}">Нет аккаунта? Зарегистрироваться</a>
+    <div class="registration-container">
+        <h2>Вход</h2>
+            {% if wrongMess != '' %}
+                <strong style="color: red; font-size: 30px;"> {{wrongMess}} </strong><br>
+
+            {% endif %}
+                <form method="POST">
+                    <div class="input-group">
+                        <label for="username">Логин</label>
+                        <input type="text" name="loginname" placeholder="Имя пользователя" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" name="password" placeholder="Пароль" required>
+                    </div>
+                    <button class="submit-button" type="submit">Войти</button>
+                </form>
+            <a href="{{ url_for('register') }}">Нет аккаунта? Зарегистрироваться</a>
+    </div>
+
+   
 </body>
 </html>

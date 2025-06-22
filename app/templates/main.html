@@ -4,67 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Доступные Чаты</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-        }
-        .chat-list {
-            max-height: 400px; /* Максимальная высота для области чатов */
-            overflow-y: auto; /* Включаем вертикальную прокрутку */
-            border: 1px solid #ccc;
-            background-color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px; /* Отступ снизу */
-        }
-        .chat-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .chat-item:last-child {
-            border-bottom: none; /* Убираем нижнюю границу у последнего элемента */
-        }
-        .button-container {
-            text-align: center;
-        }
-        .button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mainpageStyles.css') }}">
 </head>
 <body>
-    <h1>Доступные Чаты</h1>
-    <div class="chat-list">
-        {% for chat in chats %}
-            <div class="chat-item">
-                ID: {{ chat[0] }}, Имя: {{ chat[1] }}  <!-- Отображаем ID и имя чата -->
-                <form action="{{ url_for('join_chat', chat_id=chat[0]) }}" method="POST">
-                    <input type="hidden" name="user_id" value="{{ user_id }}"> <!-- ID пользователя -->
-                    <button type="submit">Присоединиться</button>
-                </form>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="button-container">
-        <form action="{{ url_for('create_chat') }}" method="POST">
-            <input type="text" name="chat_name" placeholder="Имя нового чата" required>
-            <button type="submit">Создать чат</button>
-        </form>
+    <div class="container">
+        <h1>Доступные Чаты</h1>
+        <div class="chat-list">
+            {% for chat in chats %}
+                <div class="chat-item">
+                    Имя: {{ chat[1] }}<br> создан : {{chat[2].strftime('%Y-%m-%d')}}  <!-- Отображаем ID и имя чата -->
+                    <form action="{{ url_for('join_chat', chat_id=chat[0]) }}" method="POST">
+                        <input type="hidden" name="user_id" value="{{ user_id }}"> <!-- ID пользователя -->
+                        <button type="submit" class="join-button">Присоединиться</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="button-container">
+            <form action="{{ url_for('create_chat') }}" method="POST">
+                <input type="text" name="chat_name" placeholder="Имя нового чата" required class="chat-input">
+                <button type="submit" class="create-button">Создать чат</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

@@ -1,0 +1,83 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f4f8;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Ширина контейнера */
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.chat-list {
+    margin-bottom: 20px;
+    max-height: 300px; 
+    overflow-y: auto;
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    border-radius: 5px; 
+    background-color: #f9f9f9;
+}
+
+.chat-item {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.join-button {
+    padding: 5px 10px;
+    background-color: #5a692f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.join-button:hover {
+    background-color: #c7ca20;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.chat-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(100% - 22px); /* Учитываем отступы */
+}
+
+.create-button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+.create-button:hover {
+    background-color: #218838;
+}

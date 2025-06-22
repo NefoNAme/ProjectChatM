@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чат {{ chat_id }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registrationStyle.css') }}">
+    <title>Чат {{ chatName }}</title>
     <style>
                body {
             display: flex;
@@ -94,8 +95,7 @@
     </style>
 </head>
 <body>
-    <h1>Чат {{ chatName }}</h1>
-
+   
     <!-- <h2>Пользователи в чате</h2>
     <div class="user-list">
         {% if users %}
@@ -119,8 +119,8 @@
     </div> -->
     <!-- это момо -->
     <div class="container">
-        <div class="header">Общий сетевой чат</div>
-       
+        <h1 class="header">Чат {{ chatName }}</h1>
+    
         <div class="content">
             <div class="left">
                 <div class="box2">
@@ -138,45 +138,46 @@
             </div>
             <div class="right">
                 <div class="box" id="messages">
-
-                    {% if combined %}
-                    {% set nameUser = None %}
-                    {% for user, message in combined %}
-                        {% if message is not none %}
-                            {% if nameUser is not none and nameUser[0] == user[0] %}
-                                <div><strong>{{ nameUser[1] }}:</strong> {{ message[4] }} <strong>НАПИСАНО: </strong> <i>{{ message[1] }}</i></div>
-                            {% else %}
-                                <div><strong>{{ user[1] }}:</strong> {{ message[4] if message is not none else 'Сообщение отсутствует' }} <strong>НАПИСАНО: </strong> <i>{{ message[1] if message is not none else 'Неизвестно' }}</i></div>
-                                {% set nameUser = user %}
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div>здесь пока ничего нет.</div>
-                {% endif %}
+                   
                 </div>
                 <div class="input-container">
-                    <!-- <div>
-                    <input type="text" placeholder="Введите ник" id="nickname">
-                    <input type="text" placeholder="введите ник получателя" id="toNickname">
-                </div> -->
-                <form action="{{ url_for('chat', chat_id=chat_id) }}" method="POST">
-
-                    <input type="text" name="message_text"  placeholder="Введите текст" id="message" required>
-                   
-                    <button type="submit" id="sendButton">Отправить</button>
-                    
-                </form>
+                    <form id="messageForm">
+                        <input type="text" name="message_text" placeholder="Введите текст" id="message" required>
+                        <button type="submit" id="sendButton">Отправить</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <form action="{{ url_for('chat', chat_id=chat_id) }}" method="POST">
-        <input type="hidden" name="user_id" value="{{ user_id }}"> 
-        <textarea name="message_text" placeholder="Введите ваше сообщение" required></textarea>
-        <button type="submit">Отправить</button>
-    </form> -->
-
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Отправка сообщения
+            fetchMessages();
+            $('#messageForm').on('submit', function(e) {
+                e.preventDefault();  // Предотвращаем стандартное поведение формы
+                const messageText = $('#message').val();  // Исправлено на правильный идентификатор
+                $.post('/chat/{{ chat_id }}', { message_text: messageText }, function() {
+                    $('#message').val('');  // Очищаем поле ввода
+                    fetchMessages();  // Обновляем список сообщений
+                });
+            });
+    
+            // Функция для получения сообщений
+            function fetchMessages() {
+                $.get('/chat/{{ chat_id }}/messages', function(data) {
+                    $('#messages').empty();  // Очищаем текущие сообщения
+                    data.forEach(function(message) {
+                        $('#messages').append('<p><strong>User ' + message[2] + ':</strong> ' + message[4] + ' <em>' + new Date(message[1]).toLocaleString() + '</em></p>');
+                    });
+                });
+            }
+    
+            // Обновление сообщений каждые 2 секунды
+            setInterval(fetchMessages, 500);
+        });
+    </script>
     
 </body>
 </html>
